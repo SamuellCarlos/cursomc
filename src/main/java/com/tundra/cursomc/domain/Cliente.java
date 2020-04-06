@@ -14,6 +14,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.tundra.cursomc.domain.enums.TipoCliente;
 
 @Entity
@@ -27,13 +28,15 @@ public class Cliente implements Serializable
 	private String nome;
 	private String email;
 	private String cpfOuCnpj;
+	//Armazena o numero interiro, expondo para o cliente o TipoClinte do Enum
 	private Integer tipo;
 	
+	@JsonManagedReference
 	@OneToMany(mappedBy = "cliente")
 	private List<Endereco> enderecos = new ArrayList<>();
 	
 	@ElementCollection
-	@CollectionTable(name="TELEONE")
+	@CollectionTable(name="TELEFONE")
 	private Set<String> telefones = new HashSet<>();
 	
 	public Cliente()
