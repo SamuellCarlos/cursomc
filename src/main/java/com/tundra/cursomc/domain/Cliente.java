@@ -31,6 +31,8 @@ public class Cliente implements Serializable
 	//Armazena o numero interiro, expondo para o cliente o TipoClinte do Enum
 	private Integer tipo;
 	
+	
+	
 	@JsonManagedReference
 	@OneToMany(mappedBy = "cliente")
 	private List<Endereco> enderecos = new ArrayList<>();
