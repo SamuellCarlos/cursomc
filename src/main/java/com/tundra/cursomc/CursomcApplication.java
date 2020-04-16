@@ -22,6 +22,8 @@ import com.tundra.cursomc.repositories.EnderecoRepository;
 import com.tundra.cursomc.repositories.EstadoRepository;
 import com.tundra.cursomc.repositories.ProdutoRepository;
 
+
+//Classe principal
 @SpringBootApplication
 public class CursomcApplication implements CommandLineRunner{
 	
