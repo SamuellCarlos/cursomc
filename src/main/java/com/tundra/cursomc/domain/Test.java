@@ -11,6 +11,4 @@ public class Test {
 		this.num = num;
 	}
 	
-	
-
 }

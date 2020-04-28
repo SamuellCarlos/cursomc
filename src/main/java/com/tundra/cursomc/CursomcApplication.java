@@ -1,6 +1,8 @@
 package com.tundra.cursomc;
 
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,13 +15,20 @@ import com.tundra.cursomc.domain.Cidade;
 import com.tundra.cursomc.domain.Cliente;
 import com.tundra.cursomc.domain.Endereco;
 import com.tundra.cursomc.domain.Estado;
+import com.tundra.cursomc.domain.Pagamento;
+import com.tundra.cursomc.domain.PagamentoComBoleto;
+import com.tundra.cursomc.domain.PagamentoComCartao;
+import com.tundra.cursomc.domain.Pedido;
 import com.tundra.cursomc.domain.Produto;
+import com.tundra.cursomc.domain.enums.EstadoPagamento;
 import com.tundra.cursomc.domain.enums.TipoCliente;
 import com.tundra.cursomc.repositories.CategoriaRepository;
 import com.tundra.cursomc.repositories.CidadeRepository;
 import com.tundra.cursomc.repositories.ClienteRepository;
 import com.tundra.cursomc.repositories.EnderecoRepository;
 import com.tundra.cursomc.repositories.EstadoRepository;
+import com.tundra.cursomc.repositories.PagamentoRepository;
+import com.tundra.cursomc.repositories.PedidoRepository;
 import com.tundra.cursomc.repositories.ProdutoRepository;
 
 
@@ -39,13 +48,17 @@ public class CursomcApplication implements CommandLineRunner{
 	private ClienteRepository clienteRepository;
 	@Autowired
 	private EnderecoRepository enderecoRepository;
+	@Autowired
+	private PedidoRepository pedidoRepository;
+	@Autowired
+	private PagamentoRepository pagamentoRepository;
 	
 		
 	public static void main(String[] args) {
 		SpringApplication.run(CursomcApplication.class, args);
 	}
 
-	public void run(String... args ) {
+	public void run(String... args ) throws ParseException {
 		
 		
 			//Cadastro e lançamentoo do Categoria e Produto
@@ -89,7 +102,23 @@ public class CursomcApplication implements CommandLineRunner{
 			cli2.getEnderecos().addAll(Arrays.asList(e3));
 			clienteRepository.saveAll(Arrays.asList(cli2));
 			enderecoRepository.saveAll(Arrays.asList(e3));
-
+			
+			//Lancamento Pedidos
+			
+			SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+			
+			Pedido ped1 = new Pedido(null, sdf.parse("27/04/2020 21:36"), cli1, e1);
+			Pedido ped2 = new Pedido(null, sdf.parse("27/04/2020 21:38"), cli2, e3);
+			//Lancamento do Pagamento no Pedido
+			Pagamento pagto1 = new PagamentoComCartao(null, EstadoPagamento.QUITADO, ped1, 6);
+			ped1.setPagamento(pagto1);
+			Pagamento pagto2 = new PagamentoComBoleto(null, EstadoPagamento.PENDENTE, ped2, sdf.parse("20/03/2020  00:00"), null);
+			ped2.setPagamento(pagto2);
+			//Associacao do Cliente aos Pedidos
+			cli1.getPedidos().addAll(Arrays.asList(ped1, ped2));
+			pedidoRepository.saveAll(Arrays.asList(ped1, ped2));
+			pagamentoRepository.saveAll(Arrays.asList(pagto1, pagto2));
+			
 			
 		}
 	
