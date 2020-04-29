@@ -10,14 +10,12 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-import com.sun.xml.bind.v2.runtime.unmarshaller.XsiNilLoader.Array;
 import com.tundra.cursomc.domain.Categoria;
 import com.tundra.cursomc.domain.Cidade;
 import com.tundra.cursomc.domain.Cliente;
 import com.tundra.cursomc.domain.Endereco;
 import com.tundra.cursomc.domain.Estado;
 import com.tundra.cursomc.domain.ItemPedido;
-import com.tundra.cursomc.domain.ItemPedidoPK;
 import com.tundra.cursomc.domain.Pagamento;
 import com.tundra.cursomc.domain.PagamentoComBoleto;
 import com.tundra.cursomc.domain.PagamentoComCartao;
