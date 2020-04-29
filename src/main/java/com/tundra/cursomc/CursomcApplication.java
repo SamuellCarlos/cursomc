@@ -10,11 +10,14 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
+import com.sun.xml.bind.v2.runtime.unmarshaller.XsiNilLoader.Array;
 import com.tundra.cursomc.domain.Categoria;
 import com.tundra.cursomc.domain.Cidade;
 import com.tundra.cursomc.domain.Cliente;
 import com.tundra.cursomc.domain.Endereco;
 import com.tundra.cursomc.domain.Estado;
+import com.tundra.cursomc.domain.ItemPedido;
+import com.tundra.cursomc.domain.ItemPedidoPK;
 import com.tundra.cursomc.domain.Pagamento;
 import com.tundra.cursomc.domain.PagamentoComBoleto;
 import com.tundra.cursomc.domain.PagamentoComCartao;
@@ -27,6 +30,7 @@ import com.tundra.cursomc.repositories.CidadeRepository;
 import com.tundra.cursomc.repositories.ClienteRepository;
 import com.tundra.cursomc.repositories.EnderecoRepository;
 import com.tundra.cursomc.repositories.EstadoRepository;
+import com.tundra.cursomc.repositories.ItemPedidoRepository;
 import com.tundra.cursomc.repositories.PagamentoRepository;
 import com.tundra.cursomc.repositories.PedidoRepository;
 import com.tundra.cursomc.repositories.ProdutoRepository;
@@ -52,6 +56,8 @@ public class CursomcApplication implements CommandLineRunner{
 	private PedidoRepository pedidoRepository;
 	@Autowired
 	private PagamentoRepository pagamentoRepository;
+	@Autowired
+	private ItemPedidoRepository itemPedidoRepository;
 	
 		
 	public static void main(String[] args) {
@@ -104,9 +110,7 @@ public class CursomcApplication implements CommandLineRunner{
 			enderecoRepository.saveAll(Arrays.asList(e3));
 			
 			//Lancamento Pedidos
-			
 			SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
-			
 			Pedido ped1 = new Pedido(null, sdf.parse("27/04/2020 21:36"), cli1, e1);
 			Pedido ped2 = new Pedido(null, sdf.parse("27/04/2020 21:38"), cli2, e3);
 			//Lancamento do Pagamento no Pedido
@@ -118,8 +122,18 @@ public class CursomcApplication implements CommandLineRunner{
 			cli1.getPedidos().addAll(Arrays.asList(ped1, ped2));
 			pedidoRepository.saveAll(Arrays.asList(ped1, ped2));
 			pagamentoRepository.saveAll(Arrays.asList(pagto1, pagto2));
-			
-			
+			//Lancamento dos itens
+			ItemPedido ip1 = new ItemPedido(ped1, p1, 0.00, 1, 2000.00);
+			ItemPedido ip2 = new ItemPedido(ped1, p3, 0.00, 2, 80.00);
+			ItemPedido ip3 = new ItemPedido(ped2, p2, 100.00, 2, 800.00);
+			//Associando os pedidos aos produtos
+			ped1.getItens().addAll(Arrays.asList(ip1, ip2));
+			ped2.getItens().addAll(Arrays.asList(ip3));
+			//Associando os produtos aos pedidos
+			p1.getItens().addAll(Arrays.asList(ip1));
+			p2.getItens().addAll(Arrays.asList(ip3));
+			p3.getItens().addAll(Arrays.asList(ip2));
+			itemPedidoRepository.saveAll(Arrays.asList(ip1, ip2, ip3));
 		}
 	
 
